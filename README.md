@@ -112,11 +112,14 @@ Next I will use my SimpleParser and my rather large data set of OHLC quotes.
 ```
 
 <a id="cc_first_and_last"></a>
-#### A First and a last candle in the dataset
+#### A first and a last candle in the dataset
 
 ```python
-   start_candle = candles.head()  print("Start candle: " + str(start_candle))
-   end_candle = candles.tail()  print("End candle: " + str(end_candle))
+    start_candle = candles.head()
+    print("Start candle: " + str(start_candle))
+
+    end_candle = candles.tail()
+    print("End candle: " + str(end_candle))
 ```
 
 <a id="cc_get_candle_by_index"></a>
