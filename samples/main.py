@@ -1,12 +1,11 @@
 # Run from main dir
-
 import sys
-sys.path.insert(0, '../src/')
+#sys.path.insert(0, '../src/')
 
 import locale
 import matplotlib as plt
 from datetime import datetime
-from mfft import Candles, SimpleParser, Styler, painter as p, RawCandle, Trader, PandasCandles
+from mdfft import Candles, SimpleParser, Styler, painter as p, RawCandle, Trader, PandasCandles
 
 # Range_dt if candles not exists
 
@@ -50,7 +49,7 @@ def painter():
     p.start_paint()
     p.title = "Save paint"
     p.paint(candles_to_paint)
-    p.save_paint('/Volumes/ExtDisk/projects/ffft/samples/candles.jpg')
+    p.save_paint('/tmp/candles.jpg')
    
     s = Styler()
     p.title="Rainbow candles"

@@ -1,4 +1,4 @@
-# Market Form Finder Toolkit (MFFT)
+# Market Data Form Finder Toolkit (MDFFT)
 
 The project goal is to make working with a raw market data easier. Provide a tool that allow to identify recurrent market patterns.
 Any types of market can processed by this.
@@ -47,16 +47,16 @@ The library allow to carry out following tasks:
 ## Install ##
 
 ```bash
- pip install mfft
+ pip install mdfft
 ```
 
 <a id="import_classes"></a>
 ## Import classes
 
-The namespace **mfft** contains of whole list of lib's classes. The example of import is below:
+The namespace **mdfft** contains of whole list of lib's classes. The example of import is below:
 
 ```python
-from mfft import Candles, SimpleParser, Styler, painter as p, RawCandle, Trader
+from mdfft import Candles, SimpleParser, Styler, painter as p, RawCandle, Trader
 ```
 
 Classes:
@@ -241,7 +241,7 @@ Possible time unit labels:
 Convert a candles collection to a pandas dataframe
 
 ```python
-    from mfft import PandasCandles
+    from mdfft import PandasCandles
 
     df = PandasCandles.candles_to_pandas_df(candles)
     print(df)
@@ -250,7 +250,7 @@ Convert a candles collection to a pandas dataframe
 You may create a dataset in which a row contains several candles prices.
 
 ```python
-    from mfft import PandasCandles
+    from mdfft import PandasCandles
 
     # 3 candles in a single row
     df_windows = PandasCandles.candles_windows_to_pandas_df(candles, 3)
@@ -341,7 +341,7 @@ You may create a dataset in which a row contains several candles prices.
 To start painting you **must** import bellow classes
 
 ```python
-    from mfft import painter as p, Styler
+    from mdfft import painter as p, Styler
 ```
 
 Matplotlib is used for drawing. That means you may use colors, marker, visual elements, etc. from Matplotlib.

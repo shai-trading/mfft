@@ -1,5 +1,5 @@
 import unittest
-from mfft import SimpleParser, Candles, TimeFrame, painter as p
+from mdfft import SimpleParser, Candles, TimeFrame, painter as p
 
 class BaseTestCase(unittest.TestCase):
 

@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from mfft import TimeFrame
+from mdfft import TimeFrame
 from .base_test import BaseTestCase
 
 

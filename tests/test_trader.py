@@ -1,5 +1,5 @@
 import unittest
-from mfft import painter as p, Trader
+from mdfft import painter as p, Trader
 from .base_test import BaseTestCase
 
 class TestOrder(BaseTestCase):

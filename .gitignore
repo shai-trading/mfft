@@ -208,5 +208,5 @@ dmypy.json
 cython_debug/
 
 samples/data
-src/mfft/research
+src/mdfft/research
 

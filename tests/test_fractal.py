@@ -1,5 +1,5 @@
 import unittest
-from mfft import FractalMaster, FractalLine, Fractal, painter as p
+from mdfft import FractalMaster, FractalLine, Fractal, painter as p
 from .base_test import BaseTestCase
 
 

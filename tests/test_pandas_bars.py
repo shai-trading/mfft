@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, './src/')
 import pandas as pd
-from mfft import SimpleParser, Candles, PandasCandles
+from mdfft import SimpleParser, Candles, PandasCandles
 from .base_test import BaseTestCase
 
 

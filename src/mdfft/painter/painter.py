@@ -6,7 +6,7 @@ from .styler import Styler
 @dataclass
 class Painter:
 
-    styler: Styler = field(init=False, default=Styler())
+    styler: Styler = field(init=False, default_factory=lambda: Styler())
     title: str = field(init=False, default='')
     __fig = None
     __skip = 0

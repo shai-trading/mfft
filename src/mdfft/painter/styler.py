@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 class Styler:
     """Class keep information abount candle style colors, line style and etc..."""
 
-    color_background : str  = field(init=False, default='white')
+    color_background: str = field(init=False, default='white')
 
     color_bear_body: str = 'black'
     color_bear_border: str = 'black'
