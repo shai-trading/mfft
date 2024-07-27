@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mdfft"
-version = "1.0.2"
+version = "1.0.1"
 authors = [
   { name="Evan Shamal", email="puuxxx1@gmail.com" },
 ]
