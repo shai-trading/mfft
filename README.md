@@ -138,7 +138,8 @@ Navigation is performed by calling ``next()`` and ```prev()``` methods of a cand
 ```python
     next_candle = my_candle.next()
     prev_candle = my_candle.prev()
-    next20_candle = my_candle.next(20) prev30_candle = my_candle.prev(30)
+    next20_candle = my_candle.next(20)
+    prev30_candle = my_candle.prev(30)
 ```
 
 <a id="cc_search_by_date"></a>
