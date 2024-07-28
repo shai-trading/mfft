@@ -11,6 +11,11 @@ authors = [
 description = "Market Data Form Finder Toolkit (MDFFT). The project goal is to make working with a raw market data easier."
 readme = "README.md"
 requires-python = ">=3.8"
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
