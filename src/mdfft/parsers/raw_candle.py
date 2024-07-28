@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-@dataclass(slots=True)
+@dataclass
 class RawCandle:
 
     dt: datetime
