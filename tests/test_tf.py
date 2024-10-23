@@ -24,6 +24,7 @@ class TestBars(BaseTestCase):
         self.assertTrue(tf.allow_change_order('1D'))
         self.assertTrue(tf.allow_change_order('2H'))
         self.assertTrue(tf.allow_change_order('3W'))
+        self.assertTrue(tf.allow_change_order('1MONTH'))
 
         tf = TimeFrame('1MONTH')
         self.assertFalse(tf.allow_change_order('1D'))
