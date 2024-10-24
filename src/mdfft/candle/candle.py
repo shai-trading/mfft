@@ -129,6 +129,14 @@ class Candle:
         )
 
     @property
+    def timestamp_utc(self):
+        return self.datetime.replace(tzinfo=datetime.timezone.utc).timestamp()
+
+    @property
+    def timestamp(self):
+        return self.datetime.timestamp()
+
+    @property
     def date(self):
         return self.__candle.dt.date()
 
