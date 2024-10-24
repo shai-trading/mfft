@@ -323,6 +323,13 @@ You may create a dataset in which a row contains several candles prices.
 
     dt_str_fmt = candle.dt_as_str('%d, %b %Y')
     print(dt_str_fmt)
+
+    # Timestamp
+    ts = candle.timestamp()
+    print(ts)
+
+    ts_utc = candle.timestamp_utc()
+    print(ts_utc)
 ```
 
 <a id="c_index"></a>
