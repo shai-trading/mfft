@@ -97,9 +97,9 @@ class TimeFrame:
             c_dt = c_dt - timedelta(days=c_dt.weekday())
             c_dt = c_dt + timedelta(days=7 * u)
         elif s == self.MONTH_SUFFIX:
-            month = c_dt.month + u
+            month = c_dt.month + u - 1
             year = c_dt.year + month // 12
-            month = month % 12
+            month = month % 12 + 1
             c_dt = datetime(year=year, month=month, day=1)
         else:
             raise ValueError('Wrong timestamp suffix')

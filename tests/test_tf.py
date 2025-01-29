@@ -4,7 +4,7 @@ from mdfft import TimeFrame
 from .base_test import BaseTestCase
 
 
-class TestBars(BaseTestCase):
+class TestTf(BaseTestCase):
 
     def test_parse(self):
         (u, t) = TimeFrame.parse_tf('1W')
@@ -29,6 +29,7 @@ class TestBars(BaseTestCase):
         self.assertTrue(tf.allow_change_order('1D'))
         self.assertTrue(tf.allow_change_order('2H'))
         self.assertTrue(tf.allow_change_order('3W'))
+        self.assertTrue(tf.allow_change_order('1MONTH'))
 
         tf = TimeFrame('1MONTH')
         self.assertFalse(tf.allow_change_order('1D'))
@@ -84,6 +85,23 @@ class TestBars(BaseTestCase):
         n = tf.next_period(n)
         self.assertEqual(n.day, 15)
 
+    def test_change_to_month_tf(self):
+        tf = TimeFrame("1MONTH")
+        n = datetime(year=1999, month=11, day=1)
+        c_dt = tf.close_period(n)
+        self.assertEqual(c_dt.year, 1999)
+        self.assertEqual(c_dt.month, 11)
+        self.assertEqual(c_dt.day, 30)
+        self.assertEqual(c_dt.hour, 23)
+        self.assertEqual(c_dt.minute, 59)
+
+        tf = TimeFrame("3MONTH")
+        c_dt = tf.close_period(n)
+        self.assertEqual(c_dt.year, 2000)
+        self.assertEqual(c_dt.month, 1)
+        self.assertEqual(c_dt.day, 31)
+        self.assertEqual(c_dt.hour, 23)
+        self.assertEqual(c_dt.minute, 59)
 
 if __name__ == '__main__':
     unittest.main()
