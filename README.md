@@ -145,12 +145,20 @@ Navigation is performed by calling ``next()`` and ```prev()``` methods of a cand
 <a id="cc_search_by_date"></a>
 #### Search by a date
 
+Exact search
 ```python
     found_candle = candles.find_candle(datetime(1999, 1, 4, 5))
     if not found_candle:
         print("Candle not found at 1999-01-04 05:00")
     return print("Found candle: " + str(found_candle))
 ```
+
+Finds a candle whose date is greater than the given
+```python
+    found_candle = candles.find_candle(datetime(1999, 1, 4, 6), nearly=True)
+    return print("Found candle: " + str(found_candle))
+```
+
 
 <a id="cc_sub_collection_by_index"></a>
 #### Get a subcollection from the main collection by indices

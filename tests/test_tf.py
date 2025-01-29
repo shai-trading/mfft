@@ -18,6 +18,11 @@ class TestBars(BaseTestCase):
         self.assertEqual(u, 2)
         self.assertEqual(t, 'H')
 
+        (u, t) = TimeFrame.parse_tf('m5')
+        self.assertEqual(u, 5)
+        self.assertEqual(t, 'M')
+
+
     def test_allow_change(self):
 
         tf = TimeFrame('1H')

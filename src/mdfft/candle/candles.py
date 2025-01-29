@@ -135,10 +135,13 @@ class Candles:
 
     def candle_at(self, index):
         if index >= self.__candles_count:
-            raise IndexError('No bar at index {index}')
+            raise IndexError(f'No bar at index {index}')
         return self._mk_candle(index)
 
-    def find_candle(self, candle_dt, from_candle=None):
+    def candle_exists(self, candle_dt):
+        return self.find_candle(candle_dt) is not None
+
+    def find_candle(self, candle_dt, from_candle=None, nearly=False):
         """Search candle by date"""
         if candle_dt is None:
             return None
@@ -152,7 +155,7 @@ class Candles:
             else:
                 lft = m
         candle = self._mk_candle(lft)
-        if candle.datetime == candle_dt:
+        if nearly or candle.datetime == candle_dt:
             return candle
         return None
 
@@ -194,7 +197,7 @@ class Candles:
             self.timeframe,
             self.price_coeff)
 
-    def range_dt(self, dt_start=None, dt_end=None):
+    def range_dt(self, dt_start=None, dt_end=None, ):
         """Range candles between dates"""
         return self.range_candles(self.find_candle(dt_start), self.find_candle(dt_end))
 

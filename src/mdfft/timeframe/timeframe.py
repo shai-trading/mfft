@@ -12,20 +12,36 @@ class TimeFrame:
 
     TF_ORDER = [M_SUFFIX, H_SUFFIX, D_SUFFIX, W_SUFFIX, MONTH_SUFFIX]
 
+    __RE_UNIT = r'(\d?\d?)'
+    __RE_SUFFIX = r'(M|H|D|W|MONTH)'
+
     __delta = timedelta(microseconds=1)
     __tf = '1M'
 
     @classmethod
     def parse_tf(cls, tf):
-        mr = re.match(r'^\s*(\d?\d?)(M|H|D|W|MONTH)\s*$', tf, re.IGNORECASE)
-        if mr is None:
-            return None, None
 
-        unit = mr.group(1)
-        if unit == '':
-            unit = 1
+        plan = [
+            [
+                r'^\s*' + cls.__RE_UNIT + cls.__RE_SUFFIX + r'\s*$',
+                1, 2
+            ],
+            [
+                r'^\s*' + cls.__RE_SUFFIX + cls.__RE_UNIT + r'\s*$',
+                2, 1
+            ],
+        ]
 
-        return int(unit), mr.group(2).upper()
+        for p in plan:
+            mr = re.match(p[0], tf, re.IGNORECASE)
+            if mr is not None:
+                unit = mr.group(p[1])
+                if unit == '':
+                    unit = 1
+                unit = int(unit)
+                suffix = mr.group(p[2]).upper()
+                return unit, suffix
+        return None, None
 
     @classmethod
     def tf(cls, tf):

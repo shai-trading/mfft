@@ -10,7 +10,7 @@ class Candle:
     DIRECT_BULL = 'bull'
     DIRECT_DOJI = 'doji' # Open price == Close price
 
-    __DT_FORMAT = '%d.%m.%Y %H:%M'
+    __DT_FORMAT = '%Y.%m.%d %H:%M'
 
     __ATTRS_MAP = {
         'o':  'open',
@@ -160,17 +160,17 @@ class Candle:
             return self.DIRECT_DOJI
         return None
 
-    def next(self, num=1):
-        new_index = self.__index + num
-        if new_index >= len(self.__candles):
+    def step(self, step_size):
+        new_index = self.__index + step_size
+        if (new_index >= len(self.__candles)) or (new_index < 0):
             return None
         return Candle(self.__candles, new_index, self.__price_coeff)
 
+    def next(self, num=1):
+        return self.step(abs(num))
+
     def prev(self, num=1):
-        new_index = self.__index - num
-        if new_index < 0:
-            return None
-        return Candle(self.__candles, new_index, self.__price_coeff)
+        return self.step(0 - abs(num))
 
     @property
     def price_coeff(self):

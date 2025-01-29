@@ -70,6 +70,16 @@ class TestFractal(BaseTestCase):
         lines = f.find_line("D1U3D2", self._candles_fractals().head(), exact=True)
         self.assertEqual(len(lines), 1)
 
+    def test_find_last_lane(self):
+        f = FractalMaster()
+
+        last_line = f.last_line(self._candles_fractals().head().next(), 3)
+        self.assertIsNone(last_line)
+
+        last_line = f.last_line(self._candles_fractals().tail(), 3)
+        self.assertIsNotNone(last_line)
+        self.assertEqual(last_line.title(), "D2D1U3")
+
 
 if __name__ == '__main__':
     unittest.main()

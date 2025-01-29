@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta
 from .base_test import BaseTestCase
 
 class TestCandles(BaseTestCase):
@@ -9,10 +9,10 @@ class TestCandles(BaseTestCase):
 
     def test_get_price_as_str(self):
         c = self._candles().head()
-        self.assertEqual(c['o'], 113.25 )
-        self.assertEqual(c['h'], 113.25 )
-        self.assertEqual(c['l'], 113.2 )
-        self.assertEqual(c['c'], 113.24 )
+        self.assertEqual(c['o'], 113.25)
+        self.assertEqual(c['h'], 113.25)
+        self.assertEqual(c['l'], 113.2)
+        self.assertEqual(c['c'], 113.24)
 
 
     def test_common(self):
@@ -84,6 +84,22 @@ class TestCandles(BaseTestCase):
 
         fb = candles.find_candle(fdt, b.next())
         self.assertIsNone(fb)
+
+    def test_find_nearly(self):
+        candles = self._candles()
+        b = candles.head().next().next()
+
+        bdt = datetime.strptime(b.dt_as_str(self.DT_FMT), '%Y-%m-%d %H:%M:%S')
+        pdt = bdt - timedelta(minutes=1)
+
+        pb = candles.find_candle(pdt, nearly=True)
+        self.assertIsNotNone(pb)
+        self.assertEqual(pb, b.prev())
+
+        ndt = pdt + timedelta(minutes=1)
+        nb = candles.find_candle(ndt, nearly=True)
+        self.assertIsNotNone(nb)
+        self.assertEqual(nb, b)
 
     def test_range(self):
         candles = self._candles()

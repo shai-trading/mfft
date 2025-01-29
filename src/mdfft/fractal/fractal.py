@@ -28,6 +28,9 @@ class Fractal:
 
     @prev_candles_cnt.setter
     def prev_candles_cnt(self, value):
+        """
+        May be wrong if fractal line made with inverse mode
+        """
         self.__prev_candles_cnt = value
 
     @property

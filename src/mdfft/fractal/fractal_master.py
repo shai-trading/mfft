@@ -55,17 +55,16 @@ class FractalMaster:
             return Fractal(Fractal.FRAC_DOWN, candle)
         return None
 
-    def line(self, candle, frac_cnt=1):
+    def line(self, start_candle, frac_cnt=1, inverse=False):
         """Fractal line"""
 
+        step_size = -1 if inverse else 1
         fracs = []
-
-        c = candle.clone()
+        c = start_candle.clone()
         ccnt = 1
         while (c is not None) and (len(fracs) < frac_cnt):
             frac = self.fractal(c)
-            c = c.next()
-
+            c = c.step(step_size)
             if frac is None:
                 ccnt = ccnt + 1
                 continue
@@ -81,10 +80,17 @@ class FractalMaster:
                 fracs.append(frac)
 
             ccnt = 1
+
         if len(fracs) != frac_cnt:
             return None
 
+        if inverse:
+            fracs.reverse()
+
         return FractalLine(fracs)
+
+    def last_line(self, start_candle, fracs_cnt=1):
+        return self.line(start_candle, frac_cnt=fracs_cnt, inverse=True)
 
     def find_line(self, line, candle, max_lines=10, exact=True):
         frac_cnt = line.count(Fractal.FRAC_UP) + line.count(Fractal.FRAC_DOWN)

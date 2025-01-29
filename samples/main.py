@@ -1,6 +1,6 @@
 # Run from main dir
 import sys
-#sys.path.insert(0, '../src/')
+sys.path.insert(0, '../src/')
 
 import locale
 import matplotlib as plt
@@ -56,8 +56,8 @@ def painter():
     s.color_bear_body =   [plt.cm.get_cmap('Pastel1', candles_cnt)(c) for c in range(candles_cnt)]
     s.color_bear_border = [plt.cm.get_cmap('Set1_r',  candles_cnt)(c) for c in range(candles_cnt)]
     s.color_bear_shadow = "blue"
-    s.color_bull_body =   [plt.cm.get_cmap('turbo',    candles_cnt)(c) for c in range(candles_cnt)]
-    s.color_bull_border = [plt.cm.get_cmap('tab20b',  candles_cnt)(c) for c in range(candles_cnt)]
+    s.color_bull_body =   [plt.cm.get_cmap('Blues',    candles_cnt)(c) for c in range(candles_cnt)]
+    s.color_bull_border = [plt.cm.get_cmap('Accent',  candles_cnt)(c) for c in range(candles_cnt)]
     s.color_bull_shadow = "green"
     p.styler = s
 
