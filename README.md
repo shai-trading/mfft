@@ -212,12 +212,12 @@ Finds a candle whose date is greater than the given
 
 A candle collection may be converted from a current timeframe to another timeframe. A new timeframe must be bigger than the source timeframe.
 
-Example: the timeframe of 1 hour **may be** converted to 2 hours, 8 hours, 2 days, or another one, but bigger than source one.
+Example: the timeframe of 1 hour **may be** converted to 2 hours, 8 hours, 1 day, or another one, but bigger than source one.
 The 1 hour timeframe **must not** convert to 45 minutes, 30 minutes, or another one less.
 
 A timeframe label consists of two parts: a number of time units and a time unit label.
 
-Example of timeframes: _24M_ - 24 minutes timeframe, _1H_ - 1 hour timeframe, _11H_ - 11 hours timeframe, _1D_ - 1 day timeframe, _11D_ - 11 days timeframe
+Example of timeframes: _20M_ - 29 minutes timeframe, _1H_ - 1 hour timeframe, _3H_ - 11 hours timeframe, _1D_ - 1 day timeframe
 
 Possible time unit labels:
 * **M** - minute
@@ -225,6 +225,11 @@ Possible time unit labels:
 * **D** - day
 * **W** - week
 * **MONTH** - month
+
+Possible timeframes units:
+* For minute - 1,2,3,4,5,6,10,15,20,30
+* For hours - 1,2,3,4,6,8,12
+* Other - only 1
 
 <a id="tf_current"></a>
 #### Get a timeframe of a candles collection
@@ -237,10 +242,9 @@ Possible time unit labels:
 #### Change a candles collection timeframe
 
 ```python
-    candles_2h  = candles.to_tf("2H")
-    candles_3h  = candles_2h.to_tf("3H")
+    candles_3h  = candles_1h.to_tf("3H")
     candles_4h  = candles_3h.to_tf("4H")
-    candles_13h = candles_4h.to_tf("13H")
+    candles_12h = candles_4h.to_tf("12H")
     candles_1d  = candles_4h.to_tf("1D")
 ```
 
