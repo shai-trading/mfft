@@ -12,6 +12,14 @@ class TimeFrame:
 
     TF_ORDER = [M_SUFFIX, H_SUFFIX, D_SUFFIX, W_SUFFIX, MONTH_SUFFIX]
 
+    TF_UNITS = {
+        M_SUFFIX: [1,2,3,4,5,6,10,15,20,30],
+        H_SUFFIX: [1,2,3,4,6,8,12],
+        D_SUFFIX: [1],
+        W_SUFFIX: [1],
+        MONTH_SUFFIX: [1]
+    }
+
     __RE_UNIT = r'(\d?\d?)'
     __RE_SUFFIX = r'(M|H|D|W|MONTH)'
 
@@ -40,6 +48,7 @@ class TimeFrame:
                     unit = 1
                 unit = int(unit)
                 suffix = mr.group(p[2]).upper()
+
                 return unit, suffix
         return None, None
 
@@ -50,7 +59,12 @@ class TimeFrame:
         return tf
 
     def __init__(self, tf):
-        self.__tf = tf
+        u, s = TimeFrame.parse_tf(tf)
+        if u and s:
+            if u in TimeFrame.TF_UNITS.get(s,[]):
+                self.__tf = tf
+                return
+        raise ValueError("Bad timeframe tf")
 
     def __str__(self):
         return f"{self.unit()}{self.suffix()}"
@@ -109,9 +123,11 @@ class TimeFrame:
         s = self.suffix()
         c_dt = dt
         if s == self.M_SUFFIX:
-            pass
+            b = dt.minute // self.unit()
+            c_dt = c_dt.replace(minute=b*self.unit(), second=0, microsecond=0)
         elif s == self.H_SUFFIX:
-            c_dt = c_dt.replace(minute=0, second=0, microsecond=0)
+            b = dt.hour // self.unit()
+            c_dt = c_dt.replace(hour=b*self.unit(), minute=0, second=0, microsecond=0)
         elif s == self.D_SUFFIX:
             c_dt = c_dt.replace(hour=0, minute=0, second=0, microsecond=0)
         elif s == self.W_SUFFIX:

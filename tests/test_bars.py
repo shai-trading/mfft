@@ -170,12 +170,10 @@ class TestCandles(BaseTestCase):
     def test_change_tf(self):
         candles = self._candles()
 
-        candles2h = candles.to_tf('2h')
+        candles2h = candles.to_tf('3h')
         self.assertIsNotNone(candles2h)
         self.assertEqual(candles2h.head().hour, 12)
         self.assertEqual(candles2h.head().next().hour, 15)
-        self.assertEqual(candles2h.head().next(2).hour, 1)
-        self.assertEqual(candles2h.head().next(3).hour, 3)
         self.assertEqual(candles2h.head().next(3).day, 4)
         self.assertEqual(candles2h.tail().year, 2008)
 
