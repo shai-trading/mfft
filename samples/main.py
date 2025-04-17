@@ -86,14 +86,14 @@ def parser():
 
     raw_candles = [
         RawCandle(
-            dt=datetime(2020, 1, 1),
+            dt=datetime(2020, 1, 1, tzinfo=timezone.utc),
             o=2,
             h=4,
             l=1,
             c=3
         ),
         RawCandle(
-            dt=datetime(2020, 1, 2),
+            dt=datetime(2020, 1, 2, tzinfo=timezone.utc),
             o=12,
             h=14,
             l=11,

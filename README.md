@@ -74,25 +74,29 @@ Classes:
 ### Load candles ###
 
 The collection of candles is created by parsing quotes or making an array of RawCandle objects. The array of RawCandles is created by the programmer himself.
+> [!NOTE]
+> datetime object must be in the UTC time zone. If you are not set a timezone then error occurred.
+> Please pay attention to the use of time zones to avoid errors.
 
 ```python
    raw_candles = [
         RawCandle(
-            dt=datetime(2020, 1, 1), # Candle datetime
+            dt=datetime(2020, 1, 1, tzinfo=timezone.utc), # Candle datetime
             o=2,                     # Open price
             h=4,                     # High price
             l=1,                     # Low price
             c=3                      # Close price
         ),
         RawCandle(
-            dt=datetime(2020, 1, 2), # dt
+            dt=datetime(2020, 1, 2, tzinfo=timezone.utc), # dt
             o=12,                    # ohlc prices
             h=14,
             l=11,
             c=13
         )
     ]
-    candles = Candles.from_raw_candles(raw_candles, timeframe="1D")
+    # Candles in America/Lima timezone
+    candles = Candles.from_raw_candles(raw_candles, timeframe="1D", tz='America/Lima')
     print(candles)
 ```
 
