@@ -144,7 +144,7 @@ class Painter:
         ax.set_aspect('auto')
         ax.set_xticks([b.index for b in working_candles])
         ax.set_xticklabels([b.datetime.strftime(self.styler.dt_format) for b in working_candles])
-        ax.xaxis.set_major_locator(MaxNLocator(nbins='auto', prune='both', symmetric=True))
+        ax.xaxis.set_major_locator(MaxNLocator(nbins='auto', prune='both'))
         if self.title:
             plt.title(self.title)
 

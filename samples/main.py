@@ -43,8 +43,8 @@ def painter():
     p.title="Candles"
     p.paint(candles_to_paint)
     p.paint_done()
-    
     #
+    # #
     p.start_paint()
     p.title = "Save paint"
     p.paint(candles_to_paint)
@@ -64,11 +64,12 @@ def painter():
     p.start_paint()
     p.paint(candles_to_paint)
     for c in candles_to_paint:
-        if (c.index % 5) == 0:
+        if (c.index % 20) == 0:
             p.paint_marker(c, "l", marker_size=4, marker_color='red', marker='v')
             p.paint_marker(c, "h", marker_size=4, marker_color='black', marker='^')
             p.paint_marker(c, c.mid, marker='_')
     p.paint_done()
+
     #
     p.start_paint()
     p.paint(candles_to_paint)
