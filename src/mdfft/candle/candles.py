@@ -3,6 +3,7 @@ from ..timeframe import TimeFrame
 from .candle import Candle
 from pytz import timezone
 import pytz
+import tzlocal
 
 class Candles:
     """
@@ -17,9 +18,14 @@ class Candles:
     __timezone = pytz.utc
 
     def __init__(self, raw_candles=None, timeframe='1M', price_coeff=1,
-                 nparray=None, tz=pytz.utc):
+                 nparray=None, tz=None):
         if raw_candles is None:
             raw_candles = []
+
+        if tz is None:
+            tz = tzlocal.get_localzone()
+        if isinstance(tz, str):
+            tz = timezone(tz)
 
         if nparray:
             for i in range(nparray.shape[0] // 5):
@@ -34,9 +40,8 @@ class Candles:
         self.__candles_count = len(raw_candles)
         self.__price_coeff = price_coeff
         self.__timeframe = TimeFrame.tf(timeframe)
-        if isinstance(tz, str):
-            tz = timezone(tz)
         self.__timezone = tz
+
 
     def __repr__(self):
         table = "dt o h l c\n"
@@ -88,12 +93,12 @@ class Candles:
         return self.__candles_count
 
     @classmethod
-    def from_raw_candles(cls, candles, timeframe='1M', price_coeff=1, tz='UTC'):
+    def from_raw_candles(cls, candles, timeframe='1M', price_coeff=1, tz=None):
         return Candles(raw_candles=candles, price_coeff=price_coeff,
                        timeframe=timeframe, tz=tz)
 
     @classmethod
-    def from_array(cls, array, timeframe='1M', price_coeff=1, tz='UTC' ):
+    def from_array(cls, array, timeframe='1M', price_coeff=1, tz=None):
         return Candles(nparray=array, price_coeff=price_coeff,
                        timeframe=timeframe, tz=tz)
 
@@ -284,7 +289,7 @@ class Candles:
             high_candle, low_candle = range_candles.high_and_low_candles()
             raw_candles.append(
                 RawCandle(
-                    # UTC
+                    # datetime in UTC
                     new_tf.open_period(start_candle.raw_candle.dt),
                     o=start_candle.open,
                     h=high_candle.high,
