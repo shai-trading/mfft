@@ -230,8 +230,8 @@ def timeframe():
     candles_2h = candles.to_tf("2H")
     candles_3h = candles_2h.to_tf("3H")
     candles_4h = candles_3h.to_tf("4H")
-    candles_13h = candles_4h.to_tf("13H")
-    print(candles_13h)
+    candles_12h = candles_4h.to_tf("12H")
+    print(candles_12h)
 
 def pandas():
 
