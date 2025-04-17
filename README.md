@@ -81,26 +81,31 @@ The collection of candles is created by parsing quotes or making an array of Raw
 ```python
    raw_candles = [
         RawCandle(
-            dt=datetime(2020, 1, 1, tzinfo=timezone.utc), # Candle datetime
-            o=2,                     # Open price
-            h=4,                     # High price
-            l=1,                     # Low price
-            c=3                      # Close price
+            dt=datetime(2020, 1, 1,
+                tzinfo=timezone.utc), # Candle datetime with timezone
+            o=2,                      # Open price
+            h=4,                      # High price
+            l=1,                      # Low price
+            c=3                       # Close price
         ),
         RawCandle(
-            dt=datetime(2020, 1, 2, tzinfo=timezone.utc), # dt
-            o=12,                    # ohlc prices
+            dt=datetime(2020, 1, 2,
+                tzinfo=timezone.utc), # dt
+            o=12,                     # ohlc prices
             h=14,
             l=11,
             c=13
         )
     ]
-    # Candles in America/Lima timezone
+
+    # Now candles in America/Lima timezone
+    # If tz is not set than use local zone
     candles = Candles.from_raw_candles(raw_candles, timeframe="1D", tz='America/Lima')
     print(candles)
 ```
 
 Next I will use my SimpleParser and my rather large data set of OHLC quotes.
+By default candles is in local time zone
 
 ```python
  parser = SimpleParser(file="./data/EURUSD_H1.txt")
@@ -149,7 +154,7 @@ Navigation is performed by calling ``next()`` and ```prev()``` methods of a cand
 <a id="cc_search_by_date"></a>
 #### Search by a date
 
-Exact search
+Exact search.
 ```python
     found_candle = candles.find_candle(datetime(1999, 1, 4, 5))
     if not found_candle:
@@ -184,6 +189,7 @@ Finds a candle whose date is greater than the given
     from datetime import datetime
     # New candles collection from 2000-01-01 to 2000-01-10
     # Note Only if candles are exists
+
     candles_range = candles.range_dt( datetime(2000, 1, 3,  1 ), datetime(2000, 1, 10, 1))
     if not candles_range:
         print("No candles in range")
