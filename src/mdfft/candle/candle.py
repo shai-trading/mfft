@@ -126,6 +126,10 @@ class Candle:
         return dt.astimezone(self.__tz)
 
     @property
+    def timezone(self):
+        return self.__tz
+
+    @property
     def timestamp(self):
         return int(self.__candle.dt.timestamp())
 

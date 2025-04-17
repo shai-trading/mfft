@@ -8,7 +8,7 @@ class TestCandles(BaseTestCase):
 
     def test_candle_ts(self):
         c = self._candles().head()
-        self.assertEqual(c.timestamp, 915181200)
+        self.assertEqual(c.timestamp, 915192000)
 
     def test_get_price_as_str(self):
         c = self._candles().head()

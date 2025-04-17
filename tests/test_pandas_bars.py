@@ -5,7 +5,7 @@ from mdfft import SimpleParser, Candles, PandasCandles
 from .base_test import BaseTestCase
 
 
-class TestBars(BaseTestCase):
+class TestPadasBars(BaseTestCase):
 
     def load_df(self):
         q = pd.read_csv(

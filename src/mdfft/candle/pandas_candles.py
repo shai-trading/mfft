@@ -50,7 +50,7 @@ class PandasCandles:
         return pd.DataFrame(df_struct, index=list(range(len(windows))))
 
     @classmethod
-    def pandas_df_to_candles(cls, df, tf, o='o', h='h', l='l', c='c', dt='dt', tz=timezone.utc):
+    def pandas_df_to_candles(cls, df, tf, o='o', h='h', l='l', c='c', dt='dt', tz=None):
         df = df.reset_index()
         return Candles.from_raw_candles(
             [RawCandle(
