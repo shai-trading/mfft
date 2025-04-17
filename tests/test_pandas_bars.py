@@ -18,7 +18,7 @@ class TestBars(BaseTestCase):
             lambda r: '19' + r if r[0] == '9' else '20' + r[1:])
         q.time = q.time.apply(lambda r: '0' + r if len(r) == 3 else r)
         q = q.assign(
-            dt=pd.to_datetime(q.date + ' ' + q.time, format='%Y%m%d %H%M'))
+            dt=pd.to_datetime(q.date + ' ' + q.time, format='%Y%m%d %H%M', utc=True))
         q.drop(['date', 'time'], axis=1, inplace=True)
         return q
 

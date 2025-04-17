@@ -4,7 +4,16 @@ from datetime import datetime
 @dataclass
 class RawCandle:
 
-    dt: datetime
+    # Datetime in UTC
+    # |
+    # |
+    # v
+    dt: datetime # <-- In UTC
+    # ^
+    # |
+    # |
+    # In UTC
+
     o: float
     h: float
     l: float

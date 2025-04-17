@@ -27,8 +27,9 @@ class Candle:
     __candles = None
     __index = None
     __price_coeff = 1
+    __tz=datetime.timezone.utc
 
-    def __init__(self, candles_list, index, price_coeff=1):
+    def __init__(self, candles_list, index, price_coeff=1, tz=datetime.timezone.utc):
         if not candles_list:
             raise ValueError('Empty candles list')
 
@@ -36,6 +37,7 @@ class Candle:
         self.__index = index
         self.__candle = candles_list[index]
         self.__price_coeff = price_coeff
+        self.__tz = tz
 
     def __repr__(self):
         return "".join((
@@ -100,49 +102,40 @@ class Candle:
 
     @property
     def year(self):
-        return self.__candle.dt.year
+        return self.datetime.year
 
     @property
     def month(self):
-        return self.__candle.dt.month
+        return self.datetime.month
 
     @property
     def day(self):
-        return self.__candle.dt.day
+        return self.datetime.day
 
     @property
     def minute(self):
-        return self.__candle.dt.minute
+        return self.datetime.minute
 
     @property
     def hour(self):
-        return self.__candle.dt.hour
+        return self.datetime.hour
 
     @property
     def datetime(self):
-        return datetime.datetime(
-            self.year,
-            self.month,
-            self.day,
-            self.hour,
-            self.minute,
-        )
-
-    @property
-    def timestamp_utc(self):
-        return self.datetime.replace(tzinfo=datetime.timezone.utc).timestamp()
+        dt = self.__candle.dt.replace(second=0, microsecond=0)
+        return dt.astimezone(self.__tz)
 
     @property
     def timestamp(self):
-        return self.datetime.timestamp()
+        return int(self.__candle.dt.timestamp())
 
     @property
     def date(self):
-        return self.__candle.dt.date()
+        return self.datetime.date()
 
     @property
     def time(self):
-        return self.__candle.dt.time()
+        return self.datetime.time()
 
     @property
     def mid(self):
@@ -156,7 +149,7 @@ class Candle:
         return mid_abs + self.open
 
     def dt_as_str(self, fmt=None):
-        return self.dt.strftime(Candle.__DT_FORMAT if fmt is None else fmt)
+        return self.datetime.strftime(Candle.__DT_FORMAT if fmt is None else fmt)
 
     @property
     def direct(self):
@@ -172,7 +165,7 @@ class Candle:
         new_index = self.__index + step_size
         if (new_index >= len(self.__candles)) or (new_index < 0):
             return None
-        return Candle(self.__candles, new_index, self.__price_coeff)
+        return Candle(self.__candles, new_index, self.__price_coeff, self.__tz)
 
     def next(self, num=1):
         return self.step(abs(num))
@@ -189,7 +182,7 @@ class Candle:
         self.__price_coeff = coeff
 
     def clone(self):
-        return Candle(self.__candles, self.__index, self.__price_coeff)
+        return Candle(self.__candles, self.__index, self.__price_coeff, self.__tz)
 
     def eq(self, other_candle):
         return repr(self) == repr(other_candle)

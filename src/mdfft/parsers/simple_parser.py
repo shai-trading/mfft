@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 import dataclasses
 from .raw_candle import RawCandle
 
@@ -11,6 +11,7 @@ class SimpleParser:
         r'^(\d?)(\d\d)(\d\d)(\d\d) (\d?\d)(\d\d) '+
         r'([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+)\s*$')
     __candles = []
+    __tz = timezone.utc
 
     def __init__(self, file):
         if file is None:
@@ -39,7 +40,8 @@ class SimpleParser:
                 month=int(mr.group(3)),
                 day=int(mr.group(4)),
                 hour=int(mr.group(5)),
-                minute=int(mr.group(6))
+                minute=int(mr.group(6)),
+                tzinfo=timezone.utc
             ),
             o=float(mr.group(7)),
             h=float(mr.group(8)),

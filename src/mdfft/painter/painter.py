@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FixedLocator, MaxNLocator
+
 from ..candle.pandas_candles import PandasCandles
 from .styler import Styler
 import warnings
@@ -137,11 +139,13 @@ class Painter:
             linewidth=styler.bar_shadow_width,
             ls=styler.style_bear_shadow)
 
-        plt.xticks(rotation=45, ha='center')
-
+        plt.xticks(rotation=45)
         ax = plt.gca()
         ax.set_aspect('auto')
+        ax.set_xticks([b.index for b in working_candles])
         ax.set_xticklabels([b.datetime.strftime(self.styler.dt_format) for b in working_candles])
+        ax.xaxis.set_major_locator(MaxNLocator(nbins='auto', prune='both', symmetric=True))
         if self.title:
             plt.title(self.title)
+
         return ax

@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from .base_test import BaseTestCase
 
 class TestCandles(BaseTestCase):
@@ -9,7 +9,6 @@ class TestCandles(BaseTestCase):
     def test_candle_ts(self):
         c = self._candles().head()
         self.assertEqual(c.timestamp, 915181200)
-        self.assertEqual(c.timestamp_utc, 915192000)
 
     def test_get_price_as_str(self):
         c = self._candles().head()
@@ -68,17 +67,19 @@ class TestCandles(BaseTestCase):
         b = candles.head().next().next(3)
 
         fdt = datetime.strptime(b.dt_as_str(self.DT_FMT), self.DT_FMT)
+        fdt = fdt.replace(tzinfo=timezone.utc)
         fb = candles.find_candle(fdt)
         self.assertTrue(b.eq(fb))
         self.assertFalse(b.prev().eq(fb))
 
-        fb = candles.find_candle(datetime.now())
+        fb = candles.find_candle(datetime.now(tz=timezone.utc))
         self.assertIsNone(fb)
 
     def test_find_bar_from_bar(self):
         candles = self._candles()
         b = candles.head().next().next()
         fdt = datetime.strptime(b.dt_as_str(self.DT_FMT), '%Y-%m-%d %H:%M:%S')
+        fdt = fdt.replace(tzinfo=timezone.utc)
 
         fb = candles.find_candle(fdt)
         self.assertIsNotNone(fb)
@@ -94,6 +95,7 @@ class TestCandles(BaseTestCase):
         b = candles.head().next().next()
 
         bdt = datetime.strptime(b.dt_as_str(self.DT_FMT), '%Y-%m-%d %H:%M:%S')
+        bdt = bdt.replace(tzinfo=timezone.utc)
         pdt = bdt - timedelta(minutes=1)
 
         pb = candles.find_candle(pdt, nearly=True)
@@ -143,28 +145,42 @@ class TestCandles(BaseTestCase):
     def test_find_left_bar(self):
 
         candles = self._candles()
-        b = candles.find_candle_before(datetime(year=1999, month=1, day=1, hour=14))
+        b = candles.find_candle_before(
+            datetime(year=1999, month=1, day=1, hour=14, tzinfo=timezone.utc)
+        )
         self.assertIsNotNone(b)
         self.assertEqual(b.hour, 13)
 
-        b = candles.find_candle_before(datetime(year=1999, month=1, day=1, hour=12))
+        b = candles.find_candle_before(
+            datetime(year=1999, month=1, day=1, hour=12, tzinfo=timezone.utc)
+        )
         self.assertIsNotNone(b)
         self.assertEqual(b.hour, 12)
 
-        b = candles.find_candle_before(datetime(year=1999, month=1, day=1, hour=11))
+        b = candles.find_candle_before(
+            datetime(year=1999, month=1, day=1, hour=11, tzinfo=timezone.utc)
+        )
         self.assertIsNone(b)
 
-        b = candles.find_candle_before(datetime(year=2099, month=1, day=1, hour=11))
+        b = candles.find_candle_before(
+            datetime(year=2099, month=1, day=1, hour=11, tzinfo=timezone.utc)
+        )
         self.assertIsNotNone(b)
         self.assertEqual(b.hour, 8)
         self.assertEqual(b.year, 2008)
 
         from_b = candles.head().next().next()
-        b = candles.find_candle_before(datetime(year=1999, month=1, day=1, hour=19), from_b)
+        b = candles.find_candle_before(
+            datetime(year=1999, month=1, day=1, hour=19, tzinfo=timezone.utc),
+            from_b
+        )
         self.assertEqual(str(from_b), str(b))
 
         from_b = candles.head().next().next()
-        b = candles.find_candle_before(datetime(year=1999, month=1, day=4, hour=19), from_b)
+        b = candles.find_candle_before(
+            datetime(year=1999, month=1, day=4, hour=19, tzinfo=timezone.utc),
+            from_b
+        )
         self.assertEqual(b.hour, 7)
 
     def test_change_tf(self):

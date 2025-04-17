@@ -1,6 +1,8 @@
 from ..parsers import RawCandle
 from ..timeframe import TimeFrame
 from .candle import Candle
+from pytz import timezone
+import pytz
 
 class Candles:
     """
@@ -12,25 +14,29 @@ class Candles:
     __candles_count = 0
     __candle_index = None
     __price_coeff = 1
+    __timezone = pytz.utc
 
     def __init__(self, raw_candles=None, timeframe='1M', price_coeff=1,
-                 array=None):
+                 nparray=None, tz=pytz.utc):
         if raw_candles is None:
             raw_candles = []
 
-        if array:
-            for i in range(array.shape[0] // 5):
+        if nparray:
+            for i in range(nparray.shape[0] // 5):
                 raw_candles.append(RawCandle(
-                    array[i * 4],
-                    array[i * 4 + 1],
-                    array[i * 4 + 2],
-                    array[i * 4 + 3],
-                    array[i * 4 + 4]))
+                    nparray[i * 4],
+                    nparray[i * 4 + 1],
+                    nparray[i * 4 + 2],
+                    nparray[i * 4 + 3],
+                    nparray[i * 4 + 4]))
 
         self.__raw_candles = raw_candles
         self.__candles_count = len(raw_candles)
         self.__price_coeff = price_coeff
         self.__timeframe = TimeFrame.tf(timeframe)
+        if isinstance(tz, str):
+            tz = timezone(tz)
+        self.__timezone = tz
 
     def __repr__(self):
         table = "dt o h l c\n"
@@ -82,14 +88,14 @@ class Candles:
         return self.__candles_count
 
     @classmethod
-    def from_raw_candles(cls, candles, timeframe='1M', price_coeff=1):
+    def from_raw_candles(cls, candles, timeframe='1M', price_coeff=1, tz='UTC'):
         return Candles(raw_candles=candles, price_coeff=price_coeff,
-                       timeframe=timeframe)
+                       timeframe=timeframe, tz=tz)
 
     @classmethod
-    def from_array(cls, array, timeframe='1M', price_coeff=1 ):
-        return Candles(array=array, price_coeff=price_coeff,
-                       timeframe=timeframe)
+    def from_array(cls, array, timeframe='1M', price_coeff=1, tz='UTC' ):
+        return Candles(nparray=array, price_coeff=price_coeff,
+                       timeframe=timeframe, tz=tz)
 
     @property
     def price_coeff(self):
@@ -104,13 +110,17 @@ class Candles:
         return self.__timeframe
 
     @property
+    def timezone(self):
+        return self.__timezone
+
+    @property
     def raw_candles(self):
         return self.__raw_candles
 
 
     def _mk_candle(self, inx):
         """Wrapper over create candle function. Uses for passing original candle costructor parameters."""
-        return Candle(self.__raw_candles, inx, self.__price_coeff)
+        return Candle(self.__raw_candles, inx, self.__price_coeff, tz=self.timezone)
 
     def append_candle(self, raw_candle=None, dt=None, o=None, h=None, l=None,
                       c=None):
@@ -139,10 +149,17 @@ class Candles:
         return self._mk_candle(index)
 
     def candle_exists(self, candle_dt):
+        """
+            Check exists candle
+            candle_dt in Candles timezone
+        """
         return self.find_candle(candle_dt) is not None
 
     def find_candle(self, candle_dt, from_candle=None, nearly=False):
-        """Search candle by date"""
+        """
+            Search candle by date
+            candle_dt in Candles timezone
+        """
         if candle_dt is None:
             return None
 
@@ -160,7 +177,10 @@ class Candles:
         return None
 
     def find_candle_before(self, dt, start_candle=None):
-        """Search a candle that is early or equal date."""
+        """
+            Search a candle that is early or equal date.
+            dt in Candles timezone
+        """
 
         if start_candle is None:
             start_candle = self.head()
@@ -195,10 +215,15 @@ class Candles:
         return Candles.from_raw_candles(
             self.raw_candles[candle_start.index:candle_end.index + 1],
             self.timeframe,
-            self.price_coeff)
+            self.price_coeff,
+            self.timezone
+        )
 
     def range_dt(self, dt_start=None, dt_end=None, ):
-        """Range candles between dates"""
+        """
+            Range candles between dates
+            dt_start, dt_end nust in candles timezone
+        """
         return self.range_candles(self.find_candle(dt_start), self.find_candle(dt_end))
 
     def skip(self, cnt):
@@ -221,7 +246,7 @@ class Candles:
                 break
             raw_candles.append(c.raw_candle)
             c = c.next()
-        return Candles.from_raw_candles(raw_candles, self.timeframe, self.price_coeff)
+        return Candles.from_raw_candles(raw_candles, self.timeframe, self.price_coeff, self.timezone)
 
     def __set_candle_index(self, index):
         self.__candle_index = index
@@ -259,7 +284,8 @@ class Candles:
             high_candle, low_candle = range_candles.high_and_low_candles()
             raw_candles.append(
                 RawCandle(
-                    new_tf.open_period(start_candle.datetime),
+                    # UTC
+                    new_tf.open_period(start_candle.raw_candle.dt),
                     o=start_candle.open,
                     h=high_candle.high,
                     l=low_candle.low,
@@ -268,7 +294,7 @@ class Candles:
             )
             start_candle = end_candle.next()
 
-        return Candles.from_raw_candles(raw_candles, new_tf, self.__price_coeff)
+        return Candles.from_raw_candles(raw_candles, new_tf, self.__price_coeff, self.timezone)
 
     def windows(self, window_len, start_candle=None):
         """Returning a window candles array"""

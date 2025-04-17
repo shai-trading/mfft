@@ -1,3 +1,5 @@
+from datetime import timezone
+
 import pandas as pd
 from ..parsers import RawCandle
 from .candles import Candles
@@ -48,9 +50,16 @@ class PandasCandles:
         return pd.DataFrame(df_struct, index=list(range(len(windows))))
 
     @classmethod
-    def pandas_df_to_candles(cls, df, tf, o='o', h='h', l='l', c='c', dt='dt'):
+    def pandas_df_to_candles(cls, df, tf, o='o', h='h', l='l', c='c', dt='dt', tz=timezone.utc):
         df = df.reset_index()
         return Candles.from_raw_candles(
-            [RawCandle(row[dt], row[o], row[h], row[l], row[c]) for index, row in df.iterrows()],
-            timeframe=tf
+            [RawCandle(
+                row[dt],
+                row[o],
+                row[h],
+                row[l],
+                row[c]
+            ) for index, row in df.iterrows()],
+            timeframe=tf,
+            tz=tz
         )

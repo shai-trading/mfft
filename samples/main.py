@@ -4,7 +4,7 @@ sys.path.insert(0, '../src/')
 
 import locale
 import matplotlib as plt
-from datetime import datetime
+from datetime import datetime, timezone
 from mdfft import Candles, SimpleParser, Styler, painter as p, RawCandle, Trader, PandasCandles
 
 # Range_dt if candles not exists
@@ -35,7 +35,6 @@ def painter():
 
     parser = SimpleParser(file="./data/EURUSD_H1.txt")
     candles = Candles.from_raw_candles(parser.parse(), timeframe="1H")
-
 
     candles_cnt = 100
     candles_to_paint = candles.take(candles_cnt, skip=1000)
@@ -197,7 +196,9 @@ def candles():
     prev30_candle = my_candle.prev(30)
     
     # Found candles
-    found_candle = candles.find_candle(datetime(1999, 1, 4, 5))
+    found_candle = candles.find_candle(
+        datetime(1999, 1, 4, 5, tzinfo=timezone.utc)
+    )
     if not found_candle:
         print("Candle not found at 1999-01-04 05:00")
         return 
